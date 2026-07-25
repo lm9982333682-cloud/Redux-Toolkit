@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeToCart } from '../redux/features/cart/cartSlice';
-import { ToastContainer, toast } from 'react-toastify';
+import {   toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 import ResponsivePagination from 'react-responsive-pagination';
@@ -73,7 +73,7 @@ const Shoping = () => {
         </div>
       }
 
-      <ToastContainer position='top-center' />
+      
     </div>
   )
 };

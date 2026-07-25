@@ -16,6 +16,11 @@ const Employees = () => {
     const { employees, error, loading } = useSelector(state => state.employee);
 
 
+    if (loading) return <div className=' min-h-100  flex  justify-center items-center ' >
+        <Loading />
+    </div>;
+
+
 
 
 
@@ -100,8 +105,8 @@ const Cart = ({ data }) => {
 
             </li>
 
-           
-           
+
+
             <li className=" sm:hidden px-4 py-2 rounded-lg bg-[#0F1324]   mb-2  border-none  ">
                 <div className="flex flex-col  gap-4">
                     {/* Left Side */}
@@ -114,11 +119,11 @@ const Cart = ({ data }) => {
                         <div>
 
                             <h2 className="text-lg font-semibold text-white">
-                              Name:   {name}
+                                Name:   {name}
                             </h2>
 
                             <p className="text-sm text-white mt-1 line-clamp-2">
-                              Email:  {email}
+                                Email:  {email}
                             </p>
 
                         </div>

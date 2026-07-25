@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import BottomFooter from '../components/BottomFooter'
 import SocialIcons from '../components/SocialIcons'
 import { FaArrowUp } from 'react-icons/fa'
+import { ToastContainer } from 'react-toastify'
 const MainLayout = () => {
 
 
@@ -61,6 +62,9 @@ const MainLayout = () => {
 
                 )
             }
+
+
+            <ToastContainer position='top-center' />
 
 
         </div>
