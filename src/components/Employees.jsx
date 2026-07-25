@@ -17,7 +17,7 @@ const Employees = () => {
 
 
 
-  
+
 
 
     return (
@@ -52,51 +52,101 @@ const Cart = ({ data }) => {
 
 
     return (
-        <li className="px-4 py-2 rounded-lg bg-[#0F1324]   mb-2  border-none  ">
-            <div className="flex flex-col items-center sm:flex-row sm:items-center justify-between gap-4">
-                {/* Left Side */}
-                <div className="flex items-start gap-4">
-                    <img
-                        className="w-15 h-15 object-cover rounded-full "
-                        src={image}
-                        alt="Product"
-                    />
-                    <div>
+        <>
 
-                        <h2 className="text-lg font-semibold text-white">
-                            {name}
-                        </h2>
+            <li className=" sm:block hidden px-4 py-2 rounded-lg bg-[#0F1324]   mb-2  border-none  ">
+                <div className="flex flex-col items-center sm:flex-row sm:items-center justify-between gap-4">
+                    {/* Left Side */}
+                    <div className="flex items-start gap-4">
+                        <img
+                            className="w-15 h-15 object-cover rounded-full "
+                            src={image}
+                            alt="Product"
+                        />
+                        <div>
 
-                        <p className="text-sm text-white mt-1 line-clamp-2">
-                            {email}
-                        </p>
+                            <h2 className="text-lg font-semibold text-white">
+                                {name}
+                            </h2>
+
+                            <p className="text-sm text-white mt-1 line-clamp-2">
+                                {email}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    {/* Price */}
+                    <div className="text-xl font-bold text-white flex items-center  gap-3 ">
+                        <CiEdit onClick={() => dispatch(openEmployeePopup(data))} className=' cursor-pointer' />
+
+                        <MdDeleteOutline onClick={() => dispatch(openDeletePopup(id))} className=' cursor-pointer' />
+
+
+                        {loading ? <LikeLoading /> :
+                            like ?
+                                <FaHeart onClick={highlight} className=' text-red-600 cursor-pointer ' /> :
+                                <FaRegHeart onClick={highlight} className=' cursor-pointer' />
+                        }
+
+
+
+
 
                     </div>
 
                 </div>
 
-                {/* Price */}
-                <div className="text-xl font-bold text-white flex items-center  gap-3 ">
-                    <CiEdit onClick={() => dispatch(openEmployeePopup(data))} className=' cursor-pointer' />
+            </li>
+            <li className=" sm:hidden px-4 py-2 rounded-lg bg-[#0F1324]   mb-2  border-none  ">
+                <div className="flex flex-col  gap-4">
+                    {/* Left Side */}
+                    <div className="flex flex-col items-start gap-4">
+                        <img
+                            className=" w-full  object-cover   "
+                            src={image}
+                            alt="Product"
+                        />
+                        <div>
 
-                    <MdDeleteOutline onClick={() => dispatch(openDeletePopup(id))} className=' cursor-pointer' />
+                            <h2 className="text-lg font-semibold text-white">
+                              Name:   {name}
+                            </h2>
+
+                            <p className="text-sm text-white mt-1 line-clamp-2">
+                              Email:  {email}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    {/* Price */}
+                    <div className="text-xl font-bold text-white flex items-center  gap-3 ">
+                        <CiEdit onClick={() => dispatch(openEmployeePopup(data))} className=' cursor-pointer' />
+
+                        <MdDeleteOutline onClick={() => dispatch(openDeletePopup(id))} className=' cursor-pointer' />
 
 
-                    {loading ? <LikeLoading /> :
-                        like ?
-                            <FaHeart onClick={highlight} className=' text-red-600 cursor-pointer ' /> :
-                            <FaRegHeart onClick={highlight} className=' cursor-pointer' />
-                    }
+                        {loading ? <LikeLoading /> :
+                            like ?
+                                <FaHeart onClick={highlight} className=' text-red-600 cursor-pointer ' /> :
+                                <FaRegHeart onClick={highlight} className=' cursor-pointer' />
+                        }
 
 
 
 
+
+                    </div>
 
                 </div>
 
-            </div>
+            </li>
 
-        </li>
+        </>
+
     );
 };
 
