@@ -99,12 +99,15 @@ const Cart = ({ data }) => {
                 </div>
 
             </li>
+
+           
+           
             <li className=" sm:hidden px-4 py-2 rounded-lg bg-[#0F1324]   mb-2  border-none  ">
                 <div className="flex flex-col  gap-4">
                     {/* Left Side */}
                     <div className="flex flex-col items-start gap-4">
                         <img
-                            className=" w-full  object-cover   "
+                            className=" w-full aspect-square object-cover   "
                             src={image}
                             alt="Product"
                         />
