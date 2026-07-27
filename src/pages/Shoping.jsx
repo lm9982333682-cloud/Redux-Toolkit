@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
+import { FaHeart, FaMinus, FaPlus, FaRegHeart, FaStar } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeToCart } from '../redux/features/cart/cartSlice';
-import {   toast } from 'react-toastify';
+import { addToCart, changeQty, removeToCart } from '../redux/features/cart/cartSlice';
+import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
 import ResponsivePagination from 'react-responsive-pagination';
@@ -12,30 +12,55 @@ import 'react-responsive-pagination/themes/classic-light-dark.css';
 import { deleteLikeToCart, likeToCart } from '../redux/features/likeCart/likeCartSlice';
 import Loading from '../components/Loading';
 import { useNavigate } from 'react-router-dom';
+import ProductNavbar from '../components/ProductNavbar';
+
+import { getProduct } from '../redux/features/product/productThunk'
+
+
 
 const Shoping = () => {
 
-
   const limit = 20;
   const [currentPage, setCurrentPage] = useState(JSON.parse((localStorage.getItem('page'))) || 1);
-
   const totalPages = 10;
 
-  const [product, setProduct] = useState([]);
-  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [sort, setSort] = useState("Sort By");
 
-  const getProduct = async () => {
-    const skip = (currentPage - 1) * limit;
-    const res = await axios.get(`https://dummyjson.com/products?limit=${limit}&skip=${skip}`);
-    setProduct(res.data.products);
-    setLoading(false);
-    localStorage.setItem('page', currentPage);
-  };
+  const skip = (currentPage - 1) * limit;
 
+  const { product, loading, error } = useSelector(state => state.product);
+
+
+  const dispatch = useDispatch();
+
+  // get data ke liye
   useEffect(() => {
-    getProduct();
-  }, [currentPage]);
+    dispatch(getProduct({ skip, limit, }));
+  }, [currentPage,]);
 
+
+  // search Data ke liye
+  let searchTime = null;
+  useEffect(() => {
+    if (search) {
+      searchTime = setTimeout(() => {
+        dispatch(getProduct({ skip, limit, search }));
+      }, 2000);
+    };
+    return () => clearTimeout(searchTime);
+  }, [search]);
+
+  // get category data ke liye
+  useEffect(() => {
+    if (category) {
+      dispatch(getProduct({ skip, limit, category }));
+    } else {
+      // All category ke liye 
+      dispatch(getProduct({ skip, limit, }));
+    };
+  }, [category]);
 
 
 
@@ -43,9 +68,19 @@ const Shoping = () => {
   return (
     <div className='  max-w-355.5  mx-auto my-5  '  >
 
+      <ProductNavbar
+        search={search}
+        setSearch={setSearch}
+        category={category}
+        setCategory={setCategory}
+        sort={sort}
+        setSort={setSort}
+      />
 
 
-      {loading ? <div className=' flex justify-center mt-15  ' >
+
+
+      {loading ? <div className=' flex items-center justify-center w-full min-h-100 ' >
         <Loading />
       </div> :
 
@@ -54,26 +89,30 @@ const Shoping = () => {
 
 
 
+
           <div className=' grid gap-5 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:mx-0 mx-5 ' >
 
-            {product.map((obj, i) => <ProductCard items={obj} key={i} />)}
+            {product?.map((obj, i) => <ProductCard items={obj} key={obj.id} />)}
 
 
           </div>
 
           <div className=' mt-5' >
 
-            <ResponsivePagination
+            {!search && !category && <ResponsivePagination
               current={currentPage}
               total={totalPages}
               onPageChange={setCurrentPage}
-            />
+            />}
+
+
+
           </div>
 
         </div>
       }
 
-      
+
     </div>
   )
 };
@@ -120,6 +159,7 @@ const ProductCard = ({ items }) => {
 
   const likeCart = useSelector(state => state.like.like);
   const checkItemInLike = likeCart.some(obj => obj.id === id);
+  const navigate = useNavigate();
 
 
   const likeToCartInItem = () => {
@@ -131,8 +171,42 @@ const ProductCard = ({ items }) => {
   }
 
 
+  let finalQty = checkItemInCart?.qty || 1;
 
-  const navigate = useNavigate();
+  const removeQtyItem = (type) => {
+
+    if (type === "+") {
+      finalQty += 1;
+
+      // toast.success('Qty Added!');
+    } else {
+      if (finalQty > 1) {
+
+        finalQty -= 1;
+        // toast.success('Qty Remove!');
+      } else {
+        Swal.fire({
+          title: "Are you sure you want to delete the item?",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Save",
+          denyButtonText: `Don't save`
+        }).then((result) => {
+
+          if (result.isConfirmed) {
+            Swal.fire("Item Delete Successfully", "", "success");
+            dispatch(removeToCart(id));
+          }
+          else if (result.isDenied) Swal.fire("Delete Cancelled", "", "info");
+        });
+      };
+
+    };
+
+
+    dispatch(changeQty({ id, finalQty }));
+  };
+
 
 
   return (
@@ -183,18 +257,27 @@ const ProductCard = ({ items }) => {
         </div>
 
 
-        <div onClick={e => e.stopPropagation()} >
+        <div onClick={(e) => e.stopPropagation()} >
+
+        
+
 
           {checkItemInCart ?
-            <button onClick={removeToCartInItem} className="bg-[tomato] text-white px-3 py-1 cursor-pointer rounded">
-              Remove
-            </button> :
+            <div className=" flex items-center  gap-2 " >
+
+              <FaMinus onClick={() => removeQtyItem("-")} />
+              <button className="bg-blue-600 text-white px-3 py-1 cursor-pointer rounded">
+                {finalQty}
+              </button>
+              <FaPlus onClick={() => removeQtyItem("+")} />
+
+
+            </div> :
 
             <button onClick={addToCartInItem} className="bg-blue-600 text-white px-3 py-1 cursor-pointer rounded">
               ADD
             </button>
           }
-
         </div>
 
 

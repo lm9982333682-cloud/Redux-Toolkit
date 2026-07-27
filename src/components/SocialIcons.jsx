@@ -60,7 +60,7 @@ const SocialIcons = () => {
                             delay: index * 0.15,
                         }}
 
-                        className={` group relative flex h-13 w-13 items-center justify-center overflow-hidden rounded-full border  border-white/10  bg-white/5 backdrop-blur-2xl transition-all duration-500
+                        className={` group     relative flex h-13 w-13 items-center justify-center overflow-hidden rounded-full border  border-white/10  bg-white/5 backdrop-blur-2xl transition-all duration-500
           ${item.glow}
           `}
                     >

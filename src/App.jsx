@@ -7,6 +7,9 @@ import Cart from './pages/Cart'
 import ProductDetails from './pages/ProductDetails'
 import Employees from './pages/Employees';
 import Shoping from './pages/Shoping';
+import Register from './pages/Register'
+import Login from './pages/Login'
+import AuthLayout from './layout/AuthLayout'
 
 const App = () => {
 
@@ -20,18 +23,25 @@ const App = () => {
           element: <Home />
         }, {
           path: '/cart',
-          element: <Cart/>
+          element: <Cart />
         }, {
           path: '/rpoduct-details/:id',
-          element: <ProductDetails/>
+          element: <ProductDetails />
         }, {
           path: '/employees',
-          element: <Employees/>
+          element:<AuthLayout> <Employees /></AuthLayout> 
         }, {
           path: '/shoping',
-          element:<Shoping/>
-        }
+          element: <Shoping />
+        },
       ]
+    },
+    {
+      path: '/register',
+      element: <Register />
+    }, {
+      path: '/login',
+      element: <Login />
     }
   ])
 

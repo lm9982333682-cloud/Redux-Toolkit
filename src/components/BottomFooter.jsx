@@ -45,8 +45,8 @@ const BottomFooter = () => {
                         <div>
 
                             <h2 className="text-3xl font-black">
-
-                                React<span className="text-indigo-400">Project</span>
+                                
+                                Redux<span className="text-indigo-400">Toolkit</span>
 
                             </h2>
 
